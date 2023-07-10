@@ -1,15 +1,10 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Map, NavigationControl, Marker, Popup } from 'maplibre-gl';
-import * as maplibre from 'maplibre-gl';
 import { forkJoin } from 'rxjs';
 import { Company } from 'src/app/models/company';
 import { Water } from 'src/app/models/water_coords/water';
 import { CompanyService } from 'src/app/services/company.service';
 import { WaterService } from 'src/app/services/water.service';
-import { Location } from '@angular/common';
-
-
-
 
 
 @Component({
@@ -26,8 +21,6 @@ export class MapComponent {
   allCoordinates: number[][] = [];
   companyWaterCoords: number[][] = [];
   showLayers: boolean = false;
-
-  // Antes de ngOnInit()
   addedSources: string[] = [];
   addedLayers: string[] = [];
 
@@ -37,8 +30,7 @@ export class MapComponent {
   private mapContainer!: ElementRef<HTMLElement>;
 
   constructor(private companyService: CompanyService,
-    private waterService: WaterService,
-    private location: Location) { }
+    private waterService: WaterService) { }
 
   ngOnInit(): void {
     const storedShowLayers = localStorage.getItem('showLayers');
@@ -53,17 +45,7 @@ export class MapComponent {
   }
 
 
-  getEconomyActivities(company: Company): string {
-    let economyActivitiesString = '';
-    if (company && company.economyActivityCIIUs && company.economyActivityCIIUs.length > 0) {
-      for (const activity of company.economyActivityCIIUs) {
-        economyActivitiesString += activity.name + ', ';
-      }
-      economyActivitiesString = economyActivitiesString.slice(0, -2);
-    }
-    return economyActivitiesString;
-  }
-
+ 
 
   ngAfterViewInit(): void {
 
@@ -99,128 +81,51 @@ export class MapComponent {
       });
 
 
-      function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number) {
-
-        const R = 6371; // Radio de la Tierra en kilómetros
-        const dLat = (lat2 - lat1) * (Math.PI / 180);
-        const dLon = (lon2 - lon1) * (Math.PI / 180);
-        const a =
-          Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-          Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
-          Math.sin(dLon / 2) * Math.sin(dLon / 2);
-        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-        const distance = R * c;
-
-        return distance;
-      }
-
-      function findNearestRiverPoint(empresaLat: number, empresaLon: number, riverPoints: any) {
-
-        let minDistance = Infinity;
-        let nearestPoint = null;
-
-        for (const point of riverPoints) {
-          const lat = point[1]; // Acceder a la latitud del punto
-          const lon = point[0]; // Acceder a la longitud del punto
-
-          const distance = calculateDistance(empresaLat, empresaLon, lat, lon);
-
-          if (distance < minDistance) {
-            minDistance = distance;
-            nearestPoint = point;
-          }
-        }
-
-        return nearestPoint;
-      }
-
       for (const company of this.companies) {
-
+        
         const empresaLat = Number(company.latitude);
         const empresaLon = Number(company.longitude);
 
-        const nearestRiverPoint = findNearestRiverPoint(empresaLat, empresaLon, this.allCoordinates);
-        const distanceToNearestRiverPoint = calculateDistance(empresaLat, empresaLon, nearestRiverPoint[1], nearestRiverPoint[0]);
+        const nearestRiverPoint = this.findNearestRiverPoint(empresaLat, empresaLon, this.allCoordinates);
+        const distanceToNearestRiverPoint = this.calculateDistance(empresaLat, empresaLon, nearestRiverPoint[1], nearestRiverPoint[0]);
 
-        console.log("Distancia mínima a la coordenada más cercana en el río:", distanceToNearestRiverPoint);
-        console.log("Coordenada más cercana en el río:", nearestRiverPoint);
         this.companyWaterCoords.push([empresaLon, empresaLat]);
         this.companyWaterCoords.push(nearestRiverPoint);
-
-
-        const lonCompany = this.companyWaterCoords[0][0];
-        const latCompany = this.companyWaterCoords[0][1];
-        const lonWater = this.companyWaterCoords[1][0];
-        const latWater = this.companyWaterCoords[1][1];
-
-        console.log(lonCompany + " - " + latCompany);
-        console.log(lonWater + " - " + latWater);
-
-
-
-        this.map?.on('style.load', () => {
-
-          if (!this.map?.getSource('water-bodies')) {
-            this.map?.addSource('water-bodies', {
-              type: 'geojson',
-              data: 'http://localhost:8080/api/geojson/data_water_bolivar'
-            });
-
-            this.map?.addLayer({
-              id: 'water-bodies-layer',
-              type: 'line',
-              source: 'water-bodies',
-              paint: {
-                'line-color': 'red', // Cambia 'red' por el color deseado, por ejemplo, '#ff0000' para rojo
-                'line-width': 3 // Ancho de la línea en píxeles
-              }
-            });
-          }
-
-
-
-
-          this.map?.addSource(`line-source-${company.name}`, {
-            type: 'geojson',
-            data: {
-              type: 'Feature',
-              geometry: {
-                type: 'LineString',
-                coordinates: [
-                  // Aquí colocas las coordenadas de la empresa y el río
-                  [lonCompany, latCompany],
-                  [lonWater, latWater],
-                ],
-              },
-            },
-          });
-
-          this.map?.addLayer({
-            id: `line-layer-${company.name}`,
-            type: 'line',
-            source: `line-source-${company.name}`,
-            paint: {
-              'line-color': 'blue', // Cambia 'blue' por el color deseado
-              'line-width': 2, // Cambia 2 por el grosor deseado en píxeles
-            },
-          });
-
-          this.removeLayers();
-
-
-
-        });
-
 
         this.addedSources.push(`line-source-${company.name}`);
         this.addedLayers.push(`line-layer-${company.name}`);
 
+        this.loadLayersMap(company);
+        this.loadPopupAndMarker(company, distanceToNearestRiverPoint); 
 
-        const url = `http://localhost:4200/company/detail`;
-        const economyStr = this.getEconomyActivities(company);
+        this.companyWaterCoords.splice(0);
+      }
 
+    });
+  }
 
-        var popup = new Popup({ offset: 25, className: 'card-container' })
+  removeLayers(): void {
+
+    this.map?.setLayoutProperty('water-bodies-layer', 'visibility', this.showLayers ? 'visible' : 'none');
+
+    for (const layerName of this.addedLayers) {
+      if(this.map?.getLayer(layerName)){
+        this.map?.setLayoutProperty(layerName, 'visibility', this.showLayers ? 'visible' : 'none');
+      }   
+    }
+  }
+
+  updateComponent(): void {
+    localStorage.setItem('showLayers', JSON.stringify(this.showLayers));
+    window.location.reload();
+  }
+
+  loadPopupAndMarker(company: Company, distRiver : number) : void{
+
+    const url = `http://localhost:4200/company/detail`;
+    const economyStr = this.getEconomyActivities(company);
+
+    var popup = new Popup({ offset: 25, className: 'card-container' })
           .setMaxWidth('350px')
           .setHTML(
             ` 
@@ -241,6 +146,9 @@ export class MapComponent {
               <div class="card-body">
                 <a href="${url}/${company.id}" class="btn btn-primary">Detalles</a>
               </div>
+              <div class="card-footer text-bg-primary">
+                Distancia al cuerpo de agua mas cerano: ${distRiver.toFixed(3)} Km.
+              </div>
 
             </div>
           `
@@ -251,30 +159,113 @@ export class MapComponent {
           .setPopup(popup)
           .addTo(this.map!);
 
-        this.companyWaterCoords.splice(0);
+  }
+  
 
+  loadLayersMap(company : Company): void{
+
+    const lonCompany = this.companyWaterCoords[0][0];
+        const latCompany = this.companyWaterCoords[0][1];
+        const lonWater = this.companyWaterCoords[1][0];
+        const latWater = this.companyWaterCoords[1][1];
+
+    this.map?.on('style.load', () => {
+
+      if (!this.map?.getSource('water-bodies')) {
+        this.map?.addSource('water-bodies', {
+          type: 'geojson',
+          data: 'http://localhost:8080/api/geojson/data_water_bolivar'
+        });
+
+        this.map?.addLayer({
+          id: 'water-bodies-layer',
+          type: 'line',
+          source: 'water-bodies',
+          paint: {
+            'line-color': 'red', // Cambia 'red' por el color deseado, por ejemplo, '#ff0000' para rojo
+            'line-width': 3 // Ancho de la línea en píxeles
+          }
+        });
       }
 
+      this.map?.addSource(`line-source-${company.name}`, {
+        type: 'geojson',
+        data: {
+          type: 'Feature',
+          geometry: {
+            type: 'LineString',
+            coordinates: [
+              // Aquí colocas las coordenadas de la empresa y el río
+              [lonCompany, latCompany],
+              [lonWater, latWater],
+            ],
+          },
+        },
+      });
 
-
+      this.map?.addLayer({
+        id: `line-layer-${company.name}`,
+        type: 'line',
+        source: `line-source-${company.name}`,
+        paint: {
+          'line-color': 'blue', // Cambia 'blue' por el color deseado
+          'line-width': 2, // Cambia 2 por el grosor deseado en píxeles
+        },
+      });
+      this.removeLayers();
     });
+
   }
 
-  removeLayers(): void {
 
-    this.map?.setLayoutProperty('water-bodies-layer', 'visibility', this.showLayers ? 'visible' : 'none');
-
-    // Cambiar la visibilidad de las capas agregadas dinámicamente
-    for (const layerName of this.addedLayers) {
-      this.map?.setLayoutProperty(layerName, 'visibility', this.showLayers ? 'visible' : 'none');
+  getEconomyActivities(company: Company): string {
+    let economyActivitiesString = '';
+    if (company && company.economyActivityCIIUs && company.economyActivityCIIUs.length > 0) {
+      for (const activity of company.economyActivityCIIUs) {
+        economyActivitiesString += activity.name + ', ';
+      }
+      economyActivitiesString = economyActivitiesString.slice(0, -2);
     }
-
+    return economyActivitiesString;
   }
 
-  updateComponent(): void {
-    localStorage.setItem('showLayers', JSON.stringify(this.showLayers));
-    window.location.reload();
+
+
+  calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number) : number{
+
+    const R = 6371; // Radio de la Tierra en kilómetros
+    const dLat = (lat2 - lat1) * (Math.PI / 180);
+    const dLon = (lon2 - lon1) * (Math.PI / 180);
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.cos(lat1 * (Math.PI / 180)) * Math.cos(lat2 * (Math.PI / 180)) *
+      Math.sin(dLon / 2) * Math.sin(dLon / 2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    const distance = R * c;
+
+    return distance;
   }
 
+
+
+   findNearestRiverPoint(empresaLat: number, empresaLon: number, riverPoints: any) {
+
+    let minDistance = Infinity;
+    let nearestPoint = null;
+
+    for (const point of riverPoints) {
+      
+      const lat = point[1]; // Acceder a la latitud del punto
+      const lon = point[0]; // Acceder a la longitud del punto
+
+      const distance = this.calculateDistance(empresaLat, empresaLon, lat, lon);
+
+      if (distance < minDistance) {
+        minDistance = distance;
+        nearestPoint = point;
+      }
+    }
+    return nearestPoint;
+  }
 
 }
