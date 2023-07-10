@@ -1,0 +1,22 @@
+<div class="map-wrap">
+
+  <div class=" d-flex align-items-center ms-3  mt-3 form-check position-absolute top-0 start-0 z-1 ">
+
+    <div class="me-2">
+      <input [(ngModel)]="showLayers" (ngModelChange)="updateComponent()" class="form-check-input" type="checkbox"
+        value="" id="flexCheckDefault">
+      <label class="form-check-label" for="flexCheckDefault">
+        Mostrar Capas
+      </label>
+
+    </div>
+
+    <a href="">
+      <i class="bi bi-question-square" style="font-size: 1rem; color: rgb(0, 0, 0);"></i>
+      
+    </a>
+  </div>
+  <a href="https://www.maptiler.com" class="watermark"><img src="https://api.maptiler.com/resources/logo.svg"
+      alt="MapTiler logo" /></a>
+  <div class="map" #map></div>
+</div>
