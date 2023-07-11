@@ -8,7 +8,7 @@ export interface EconomyActivity{
     code: string;
     name : string;
     groupCIIU: GroupCIIU;
-    centralProductsClasificationsCPC: CentralProductClasification[];
+    centralProductClasificationCPCs: CentralProductClasification[];
     residualCurrents : ResidualCurrent[];
     
 

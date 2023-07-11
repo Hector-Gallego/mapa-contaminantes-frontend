@@ -8,13 +8,18 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HeaderComponent } from './components/header/header.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { ModalMapComponent } from './components/modal.map/modal.map.component';
+import { DetailCompanyComponent } from './components/detail.company/detail.company.component';
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
     MapComponent,
-    HeaderComponent
+    HeaderComponent,
+    ModalMapComponent,
+    DetailCompanyComponent
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,161 @@
+<div class="container">
+
+    <div class="mt-5">
+        <h1 class="font-ralewey">{{company?.name}}</h1>
+        <div class="d-flex align-items-center">
+            <i class="me-3 bi bi-geo-alt" style="font-size: 1.3rem; color: rgb(44, 101, 206); "></i>
+            <p class="mb-0"> {{company?.adress}}</p>
+        </div>
+    </div>
+
+    <div class="mt-5 mb-5 ">
+
+        <div class="mb-5">
+            <h3 class="mb-3">Actividades Economícas</h3>
+            <p>
+                A continuación se presentan las actividades económicas asociadas a esta empresa.
+                Al desplegar una actividad económica, podrás visualizar las corrientes de residuos
+                y los productos o servicios asociados a esa actividad económica.
+                <br>
+                <br>
+                Cabe destacar que los residuos, productos y/o servicios no están directamente relacionados con
+                la empresa en cuestión, simplemente se trata de datos potencialmente relacionados
+                con esta empresa en base a sus actividades económicas.
+                <br>
+                <br>    
+            </p>
+
+            <div class="bd-callout-info pb-3 pt-3 ps-3">
+                Si deseas más información sobre el origen de los datos presentados a 
+                continuación ingresa a
+            <a href="informacion ">detalles</a>
+
+            </div>
+
+        </div>
+
+
+
+
+        <div *ngFor="let act of company?.economyActivityCIIUs" ngbAccordion>
+
+            <div class="mb-2" ngbAccordionItem>
+
+                <h2 ngbAccordionHeader>
+                    <button ngbAccordionButton>
+
+                        <div class="d-flex flex-column">
+
+                            <div class="mb-2 d-flex align-items-center">
+                                <i class="bi bi-code me-3" style="font-size: 1.2rem; color: rgb(44, 101, 206);"></i>
+                                <span class="fw-medium">Codígo CIIU: {{act.code}}</span>
+
+                            </div>
+
+                            <div class="mb-4 d-flex align-items-center">
+                                <i class="me-3 bi bi-info-circle"
+                                    style="font-size: 1.2rem; color: rgb(44, 101, 206); "></i>
+                                <span class="fw-medium">Descripción</span>
+                            </div>
+
+
+                            <p> {{act.name}}</p>
+                        </div>
+
+                    </button>
+                </h2>
+                <div ngbAccordionCollapse>
+
+
+                    <div ngbAccordion>
+                        <div ngbAccordionItem>
+                            <h2 ngbAccordionHeader>
+                                <button ngbAccordionButton>
+                                    <div class="d-flex align-items-center">
+                                        <i class="me-3 bi bi-radioactive"
+                                            style="font-size: 1.3rem; color: rgb(187, 197, 40);"></i>
+                                        <span class="fw-medium">Residuos asociados a esta actividad economica</span>
+                                    </div>
+
+                                </button>
+                            </h2>
+                            
+                            <div ngbAccordionCollapse>
+                                <div class="scroll-acordeon" ngbAccordionBody>
+                                    <ng-template>
+                                        <ul class="list-group">
+                                            <li class="list-group-item" *ngFor="let residuo of act.residualCurrents">
+                                                <div class="d-flex flex-column">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-code me-3" style="font-size: 1.2rem; color: rgb(44, 101, 206); "></i>
+                                                        <span class="fw-medium">Codígo de Residuo: {{residuo.code}}</span>
+                                                    </div>
+
+                                                    <div class=" mb-3 d-flex align-items-center">
+                                                        <i class="me-3 bi bi-info-circle" style="font-size: 1.2rem; color: rgb(44, 101, 206); " ></i>
+                                                        <span class="fw-medium">Descripción</span>
+                                                    </div>
+                                                    <p>{{residuo.name}}</p>
+                                                </div>
+
+                                            </li>
+                                        </ul>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div ngbAccordionItem>
+                            <h2 ngbAccordionHeader>
+                                <button ngbAccordionButton>
+
+                                    <div class="d-flex align-items-center">
+                                        <i class="me-3 bi bi-box"
+                                            style="font-size: 1.3rem; color: rgb(44, 101, 206);"></i>
+                                        <span class="fw-medium">Productos y/o servicios asociados a esta actividad
+                                            economica</span>
+                                    </div>
+
+                                </button>
+                            </h2>
+                            <div class="scroll-acordeon"  ngbAccordionCollapse>
+                                <div   ngbAccordionBody>
+                                    <ng-template  >
+                                        <ul  class="list-group">
+                                            <li class="list-group-item"
+                                                *ngFor="let producto of act.centralProductClasificationCPCs">
+                                                <div class="d-flex flex-column">
+                                                    <div class="d-flex align-items-center">
+                                                        <i class="bi bi-code me-3" style="font-size: 1.2rem; color: rgb(44, 101, 206);"></i>
+                                                        <span class="fw-medium">Codígo de de producto o/y servicio: {{producto.code}}</span>
+                                                    </div>
+
+                                                    <div class="mb-3 d-flex align-items-center">
+                                                        <i class="me-3 bi bi-info-circle" style="font-size: 1.2rem; color: rgb(44, 101, 206);"></i>
+                                                        <span class="fw-medium">Descripción</span>
+                                                    </div>
+                                                   
+                                                    
+                                                    <p>{{producto.name}}</p>
+                                                </div>
+
+                                            </li>
+                                        </ul>
+                                    </ng-template>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+
+</div>

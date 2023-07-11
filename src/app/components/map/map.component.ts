@@ -5,6 +5,10 @@ import { Company } from 'src/app/models/company';
 import { Water } from 'src/app/models/water_coords/water';
 import { CompanyService } from 'src/app/services/company.service';
 import { WaterService } from 'src/app/services/water.service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ModalMapComponent } from '../modal.map/modal.map.component'; 
+import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+
 
 
 @Component({
@@ -30,7 +34,8 @@ export class MapComponent {
   private mapContainer!: ElementRef<HTMLElement>;
 
   constructor(private companyService: CompanyService,
-    private waterService: WaterService) { }
+    private waterService: WaterService,
+    private modalService: NgbModal) { }
 
   ngOnInit(): void {
     const storedShowLayers = localStorage.getItem('showLayers');
@@ -44,6 +49,10 @@ export class MapComponent {
     this.map?.remove();
   }
 
+  openModal() {
+    this.modalService.open(ModalMapComponent); 
+  }
+  
 
  
 
@@ -182,7 +191,7 @@ export class MapComponent {
           type: 'line',
           source: 'water-bodies',
           paint: {
-            'line-color': 'red', // Cambia 'red' por el color deseado, por ejemplo, '#ff0000' para rojo
+            'line-color': 'blue', // Cambia 'red' por el color deseado, por ejemplo, '#ff0000' para rojo
             'line-width': 3 // Ancho de la línea en píxeles
           }
         });
@@ -208,8 +217,8 @@ export class MapComponent {
         type: 'line',
         source: `line-source-${company.name}`,
         paint: {
-          'line-color': 'blue', // Cambia 'blue' por el color deseado
-          'line-width': 2, // Cambia 2 por el grosor deseado en píxeles
+          'line-color': 'red', // Cambia 'blue' por el color deseado
+          'line-width': 1, // Cambia 2 por el grosor deseado en píxeles
         },
       });
       this.removeLayers();
