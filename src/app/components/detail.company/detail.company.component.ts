@@ -3,8 +3,9 @@ import { ActivatedRoute } from '@angular/router';
 import { Company } from 'src/app/models/company';
 import { CompanyService } from 'src/app/services/company.service';
 
+
 @Component({
-  selector: 'app-detail.company',
+  selector: 'app-detail-company',
   templateUrl: './detail.company.component.html',
   styleUrls: ['./detail.company.component.css']
 })

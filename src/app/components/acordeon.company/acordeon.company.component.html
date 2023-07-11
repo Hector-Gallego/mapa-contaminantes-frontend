@@ -1,0 +1,72 @@
+
+<div *ngFor="let act of company?.economyActivityCIIUs" ngbAccordion>
+
+    <div class="mb-2" ngbAccordionItem>
+
+        <h2 ngbAccordionHeader>
+            <button ngbAccordionButton>
+
+                <div class="d-flex flex-column">
+                    <div class="mb-2 d-flex align-items-center">
+                        <i class="bi bi-code me-3" style="font-size: 1.2rem; color: rgb(44, 101, 206);"></i>
+                        <span class="fw-medium">Codígo CIIU: {{act.code}}</span>
+                    </div>
+                    <div class="mb-4 d-flex align-items-center">
+                        <i class="me-3 bi bi-info-circle"
+                            style="font-size: 1.2rem; color: rgb(44, 101, 206); "></i>
+                        <span class="fw-medium">Descripción</span>
+                    </div>
+                    <p> {{act.name}}</p>
+                </div>
+
+            </button>
+        </h2>
+        <div ngbAccordionCollapse>
+            <div ngbAccordion>
+                <div ngbAccordionItem>
+                    <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton>
+                            <div class="d-flex align-items-center">
+                                <i class="me-3 bi bi-radioactive"
+                                    style="font-size: 1.3rem; color: rgb(187, 197, 40);"></i>
+                                <span class="fw-medium">Residuos asociados a esta actividad economica</span>
+                            </div>
+
+                        </button>
+                    </h2>
+                    
+                    <div ngbAccordionCollapse>
+                        <div class="scroll-acordeon" ngbAccordionBody>                  
+                            <ng-template>
+                                <app-list-acordeon-company [residuo] ="true" [ecoAct]="act" ></app-list-acordeon-company>
+                            </ng-template>                 
+                        </div>
+                    </div>
+                </div>
+
+                <div ngbAccordionItem>
+                    <h2 ngbAccordionHeader>
+                        <button ngbAccordionButton>
+                            <div class="d-flex align-items-center">
+                                <i class="me-3 bi bi-box"
+                                    style="font-size: 1.3rem; color: rgb(44, 101, 206);"></i>
+                                <span class="fw-medium">Productos y/o servicios asociados a esta actividad
+                                    economica</span>
+                            </div>
+                        </button>
+                    </h2>
+                    <div class="scroll-acordeon"  ngbAccordionCollapse>
+                        <div   ngbAccordionBody>
+                            
+                            <ng-template>
+                                <app-list-acordeon-company [ecoAct]="act" [residuo] ="false"></app-list-acordeon-company>
+                            </ng-template>      
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

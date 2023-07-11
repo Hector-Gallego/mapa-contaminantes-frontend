@@ -1,0 +1,47 @@
+<ng-container *ngIf="residuo; else productsList">
+   
+    
+        <ul class="list-group">
+            <li class="list-group-item" *ngFor="let r of ecoAct?.residualCurrents">
+                <div class="d-flex flex-column">
+                    <div class="d-flex align-items-center">
+                        <i class="bi bi-code me-3" style="font-size: 1.2rem; color: rgb(44, 101, 206); "></i>
+                        <span class="fw-medium">Codígo de Residuo: {{r.code}}</span>
+                    </div>
+        
+                    <div class=" mb-3 d-flex align-items-center">
+                        <i class="me-3 bi bi-info-circle" style="font-size: 1.2rem; color: rgb(44, 101, 206); " ></i>
+                        <span class="fw-medium">Descripción</span>
+                    </div>
+                    <p>{{r.name}}</p>
+                </div>
+        
+            </li>
+        </ul>  
+
+</ng-container>
+
+<ng-template #productsList>
+
+    <ul  class="list-group">
+        <li class="list-group-item"
+            *ngFor="let producto of ecoAct?.centralProductClasificationCPCs">
+            <div class="d-flex flex-column">
+                <div class="d-flex align-items-center">
+                    <i class="bi bi-code me-3" style="font-size: 1.2rem; color: rgb(44, 101, 206);"></i>
+                    <span class="fw-medium">Codígo de de producto o/y servicio: {{producto.code}}</span>
+                </div>
+
+                <div class="mb-3 d-flex align-items-center">
+                    <i class="me-3 bi bi-info-circle" style="font-size: 1.2rem; color: rgb(44, 101, 206);"></i>
+                    <span class="fw-medium">Descripción</span>
+                </div>
+               
+                
+                <p>{{producto.name}}</p>
+            </div>
+
+        </li>
+    </ul>
+
+</ng-template>

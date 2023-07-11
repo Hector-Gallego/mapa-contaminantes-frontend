@@ -10,6 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ModalMapComponent } from './components/modal.map/modal.map.component';
 import { DetailCompanyComponent } from './components/detail.company/detail.company.component';
+import { AcordeonCompanyComponent } from './components/acordeon.company/acordeon.company.component';
+import { ListAcordeonCompanyComponent } from './components/list-acordeon-company/list-acordeon-company.component';
 
 
 
@@ -19,7 +21,9 @@ import { DetailCompanyComponent } from './components/detail.company/detail.compa
     MapComponent,
     HeaderComponent,
     ModalMapComponent,
-    DetailCompanyComponent
+    DetailCompanyComponent,
+    AcordeonCompanyComponent,
+    ListAcordeonCompanyComponent
   ],
   imports: [
     BrowserModule,
