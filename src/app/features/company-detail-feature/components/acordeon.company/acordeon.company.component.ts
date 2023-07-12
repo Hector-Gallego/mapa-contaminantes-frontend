@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Company } from 'src/app/models/company';
+import { Company } from 'src/app/core';
+
 
 @Component({
   selector: 'app-acordeon-company',

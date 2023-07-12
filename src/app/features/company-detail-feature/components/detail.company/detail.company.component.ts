@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Company } from 'src/app/models/company';
-import { CompanyService } from 'src/app/services/company.service';
+import { Company } from 'src/app/core/models/company';
+
+import { CompanyService } from 'src/app/core/services/company.service';
+
+
+
 
 
 @Component({
@@ -30,12 +34,8 @@ export class DetailCompanyComponent {
           company.economyActivityCIIUs.forEach((eco)=>{
 
             console.log(eco.centralProductClasificationCPCs);
-          });
+          });        
           
-          
-        });
-        
-        
+        });   
      }
-
 }

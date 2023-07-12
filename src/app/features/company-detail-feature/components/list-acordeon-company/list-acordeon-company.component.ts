@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { EconomyActivity } from 'src/app/models/economy_activity/economicActivity';
+import { EconomyActivity } from 'src/app/core';
+
 
 @Component({
   selector: 'app-list-acordeon-company',

@@ -1,13 +1,17 @@
 import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { Map, NavigationControl, Marker, Popup } from 'maplibre-gl';
 import { forkJoin } from 'rxjs';
-import { Company } from 'src/app/models/company';
-import { Water } from 'src/app/models/water_coords/water';
-import { CompanyService } from 'src/app/services/company.service';
-import { WaterService } from 'src/app/services/water.service';
+
+
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalMapComponent } from '../modal.map/modal.map.component'; 
 import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
+import { CompanyService } from 'src/app/core/services/company.service';
+import { WaterService } from '../../services/water.service';
+import { Water } from '../../models/water_coords/water';
+import { Company } from 'src/app/core/models/company';
+
+
 
 
 
