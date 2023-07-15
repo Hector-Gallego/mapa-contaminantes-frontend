@@ -36,11 +36,8 @@ export class GraphicCompaniesCountResidualsActivitiesComponent {
         this.totalStatistics = data;
         this.radarChartData.labels = this.companiesNames;
       
-
         this.radarChartData.datasets[0].data = this.economyActivitiesCount;
         this.radarChartData.datasets[1].data = this.residualsCount;
-
-      
 
         this.chart?.chart?.update();
         
@@ -53,7 +50,6 @@ export class GraphicCompaniesCountResidualsActivitiesComponent {
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
  
 
-
   public radarChartOptions: ChartConfiguration['options'] = {
     responsive: true,
   };
@@ -63,11 +59,11 @@ export class GraphicCompaniesCountResidualsActivitiesComponent {
     datasets: [
       {
         data: [],
-        label: 'Actividades Economicas asociadas'
+        label: 'Actividades económicas asociadas esta empresa'
       },
       {
         data: [],
-        label: 'Corrientes de Residuos asociadas'
+        label: 'Corrientes de residuos asociados a esta empresa'
       }
     ]
   };

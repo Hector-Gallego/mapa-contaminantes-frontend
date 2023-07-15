@@ -5,7 +5,6 @@ import { forkJoin } from 'rxjs';
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalMapComponent } from '../modal.map/modal.map.component'; 
-import { NgbModalOptions } from '@ng-bootstrap/ng-bootstrap';
 import { CompanyService } from 'src/app/core/services/company.service';
 import { WaterService } from '../../services/water.service';
 import { Water } from '../../models/water_coords/water';
@@ -64,7 +63,7 @@ export class MapComponent {
 
     this.getCompaniesAndWaterCoords();
 
-    const initialState = { lng: -75.51672075924253, lat: 10.393758078010434, zoom: 14 };
+    const initialState = { lng:  -75.5022481625158, lat: 10.327510146503977, zoom: 10 };
 
     this.map = new Map({
       container: this.mapContainer.nativeElement,
@@ -93,6 +92,8 @@ export class MapComponent {
         this.allCoordinates.push(...coordinates);
       });
 
+      console.log(this.allCoordinates);
+      
 
       for (const company of this.companies) {
         
@@ -143,7 +144,7 @@ export class MapComponent {
           .setHTML(
             ` 
             <div class="card">
-              <div class="card-header text-bg-primary ">Información Basica</div>
+              <div class="card-header text-white bg-info ">Información básica</div>
               <div class="card-body">
                 <h5 class="card-title">${company.name}</h5>
                 <h6 class="card-subtitle mb-2 mt-3 text-body-secondary">Dirección</h6>
@@ -157,10 +158,10 @@ export class MapComponent {
               </ul>
               
               <div class="card-body">
-                <a href="${url}/${company.id}" class="btn btn-primary">Detalles</a>
+                <a href="${url}/${company.id}" class="btn btn-outline-primary w-100">Detalles</a>
               </div>
-              <div class="card-footer text-bg-primary">
-                Distancia al cuerpo de agua mas cerano: ${distRiver.toFixed(3)} Km.
+              <div class="card-footer text-white bg-info">
+                Distancia al cuerpo de agua más cercano: ${distRiver.toFixed(3)} Km.
               </div>
 
             </div>
@@ -182,7 +183,7 @@ export class MapComponent {
         const lonWater = this.companyWaterCoords[1][0];
         const latWater = this.companyWaterCoords[1][1];
 
-    this.map?.on('style.load', () => {
+    this.map?.on('load', () => {
 
       if (!this.map?.getSource('water-bodies')) {
         this.map?.addSource('water-bodies', {
@@ -195,8 +196,8 @@ export class MapComponent {
           type: 'line',
           source: 'water-bodies',
           paint: {
-            'line-color': 'blue', // Cambia 'red' por el color deseado, por ejemplo, '#ff0000' para rojo
-            'line-width': 3 // Ancho de la línea en píxeles
+            'line-color': 'blue', 
+            'line-width': 3 
           }
         });
       }
@@ -208,7 +209,6 @@ export class MapComponent {
           geometry: {
             type: 'LineString',
             coordinates: [
-              // Aquí colocas las coordenadas de la empresa y el río
               [lonCompany, latCompany],
               [lonWater, latWater],
             ],
@@ -221,8 +221,8 @@ export class MapComponent {
         type: 'line',
         source: `line-source-${company.name}`,
         paint: {
-          'line-color': 'red', // Cambia 'blue' por el color deseado
-          'line-width': 1, // Cambia 2 por el grosor deseado en píxeles
+          'line-color': 'red', 
+          'line-width': 1, 
         },
       });
       this.removeLayers();
@@ -232,7 +232,7 @@ export class MapComponent {
 
   calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number) : number{
 
-    const R = 6371; // Radio de la Tierra en kilómetros
+    const R = 6371; 
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLon = (lon2 - lon1) * (Math.PI / 180);
     const a =
@@ -254,8 +254,8 @@ export class MapComponent {
 
     for (const point of riverPoints) {
       
-      const lat = point[1]; // Acceder a la latitud del punto
-      const lon = point[0]; // Acceder a la longitud del punto
+      const lat = point[1];
+      const lon = point[0]; 
 
       const distance = this.calculateDistance(empresaLat, empresaLon, lat, lon);
 

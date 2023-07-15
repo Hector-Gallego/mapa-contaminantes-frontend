@@ -1,24 +1,18 @@
-
 <div class="container" #container>
 
     <div class="mt-5">
-        <h2>Listados de Empresas Registradas</h2>
+        <h2>Listado de empresas registradas</h2>
+        <app-search></app-search>
         <div class="bd-callout-info pb-3 pt-3 ps-3 mt-5">
-            Si desea puede visualizar la la ubicacion de las distintas empresas en el mapa interactivo
-        <a routerLink="/map">Mapa</a>
-
+            Si desea puede visualizar la ubicación de las distintas empresas en el mapa interactivo
+            <a routerLink="/map">Mapa</a>
         </div>
-     
     </div>
-    <app-search></app-search>
 
     <div class="d-flex flex-wrap justify-content-around mt-5">
-
         <div *ngFor="let con of content">
-
             <div class="card mb-5 " style="width: 20rem;">
                 <div class="card-header text-white text-bg-info ">Información Basica</div>
-    
                 <div class="cont-body overflow-auto" style="height: 20rem;">
                     <div class="card-body">
                         <h5 class="card-title">{{con.name}}</h5>
@@ -30,24 +24,15 @@
                         <h6 class="ms-3 mt-3 card-subtitle mb-2 text-body-secondary">Actividades Económicas</h6>
                         <li class="list-group-item">{{getActivities(con)}}</li>
                     </ul>
-
                 </div>
-        
                 <div class="card-body">
                     <button (click)="goToRoute(con.id)" class="btn btn-info text-white w-100">Detalles</button>
                 </div>
-      
-    
             </div>
-
         </div>
-      
-
-
     </div>
 
     <div class="d-flex justify-content-center mt-3 mb-5">
-
 
         <ngb-pagination [page]="page" [pageSize]="size" [collectionSize]="totalElements"
             (pageChange)="onPaginationChanged($event)"></ngb-pagination>

@@ -1,5 +1,5 @@
 <div class="row align-items-center">
-    <h3 class="mb-3 mt-5">Corrientes de residuos mas comunes por empresa</h3>
+    <h3 class="mb-3 mt-5">Corrientes de residuos más comunes por empresa</h3>
 
     <div class="col-md-6 col-lg-6 col-sm-12 mt-5">
         <canvas baseChart class="chart" [data]="pieChartData" [type]="pieChartType" [options]="pieChartOptions"
@@ -10,11 +10,11 @@
 
     <div class="col-md-6 col-lg-6 col-sm-12 mt-5">
 
-        <h6 class="mb-5">Descripción de la Corrirnte de residuo</h6>
+        <h6 class="mb-5">Descripción de la corriente de residuo</h6>
         <ul class="scroll-acordeon list-group overflow-auto" style="max-height: 50vh;">
             <div *ngFor="let dt of data">
 
-                <span class="text-body-secondary "><i class="bi bi-radioactive me-3"></i>Corriente de Residuo:
+                <span class="text-body-secondary "><i class="bi bi-radioactive me-3"></i>Corriente de residuo:
                     {{dt.code}}</span>
                 <p class="mt-3">{{dt.name}}</p>
             </div>

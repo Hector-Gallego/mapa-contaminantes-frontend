@@ -89,10 +89,10 @@ export class DashboardComponent {
   ];
 
   public barChartData: ChartData<'bar'> = {
-    labels: ['Empresas', 'Actividades Economicas', 'Corrientes de Residuos'],
+    labels: ['Empresas', 'Actividades Económicas', 'Corrientes de residuos'],
     datasets: [
-      { data: [18, 30, 20], label: 'Asociadas a Empresas' },
-      { data: [0, 48, 40], label: 'Total Registradas' }
+      { data: [18, 30, 20], label: 'Asociados con empresas' },
+      { data: [0, 48, 40], label: 'Registros totales' }
     ]
   };
 

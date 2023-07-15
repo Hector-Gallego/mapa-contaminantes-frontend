@@ -14,11 +14,13 @@
       <div class="col-md-8 col-lg-8 col-sm-12 bg-primary">
         <div class="cont-body overflow-auto z-3 position-absolute" style="max-height: 200px;">
           <ul class="list-group" >
-            <li class="list-group" *ngFor="let companie of companies$ | async">
-              <a class="list-group-item" routerLink="/company/detail/{{companie.id}}">
-                {{companie.name}}   
-              </a>
-            </li>
+            <div *ngFor="let companie of companies$ | async">
+              <li class="list-group-item" >
+                <a class="link-offset-2 link-underline link-underline-opacity-0" routerLink="/company/detail/{{companie.id}}">
+                  {{companie.name}}   
+                </a>
+              </li>
+            </div>    
           </ul>
         </div>
       </div>

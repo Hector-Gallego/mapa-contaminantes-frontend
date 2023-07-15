@@ -41,18 +41,14 @@ export class GraphicResidualsCountActivitiesComponent {
         this.barChartData.datasets[0].data = this.counts;
 
         this.chart?.chart?.update();
-        
-
-
+    
       });
-
   }
-  //bar
+  
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
-    // We use these empty structures as placeholders for dynamic theming.
     scales: {
       x: {},
       y: {}
@@ -79,7 +75,7 @@ export class GraphicResidualsCountActivitiesComponent {
     datasets: [
       {
         data: [],
-        label: 'Cantidad de Actividades economicas asociadas a este residuo'
+        label: 'Cantidad de actividades económicas asociadas a este residuo'
       },
     ],
 

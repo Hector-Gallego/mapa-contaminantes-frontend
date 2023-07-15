@@ -38,16 +38,13 @@ export class GraphicActivityCountCompanyComponent {
         this.barChartData.datasets[0].data = this.counts;
         this.chart?.chart?.update();
 
-
       });
 
   }
-  //bar
   @ViewChild(BaseChartDirective) chart: BaseChartDirective | undefined;
 
   public barChartOptions: ChartConfiguration['options'] = {
     responsive: true,
-    // We use these empty structures as placeholders for dynamic theming.
     scales: {
       x: {},
       y: {
@@ -74,7 +71,7 @@ export class GraphicActivityCountCompanyComponent {
     datasets: [
       {
         data: [],
-        label: 'Cantidad de empresas a la que esta asociado esta actividad economica'
+        label: 'Cantidad de empresas a la que está asociada esta actividad económica'
       },
     ],
 
