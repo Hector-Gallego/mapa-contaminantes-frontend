@@ -136,7 +136,7 @@ export class MapComponent {
   loadPopupAndMarker(company: Company, distRiver : number) : void{
 
     const url = `http://localhost:4200/company/detail`;
-    const economyStr = this.getEconomyActivities(company);
+    const economyStr = this.companyService.getEconomyActivities(company);
 
     var popup = new Popup({ offset: 25, className: 'card-container' })
           .setMaxWidth('350px')
@@ -229,20 +229,6 @@ export class MapComponent {
     });
 
   }
-
-
-  getEconomyActivities(company: Company): string {
-    let economyActivitiesString = '';
-    if (company && company.economyActivityCIIUs && company.economyActivityCIIUs.length > 0) {
-      for (const activity of company.economyActivityCIIUs) {
-        economyActivitiesString += activity.name + ', ';
-      }
-      economyActivitiesString = economyActivitiesString.slice(0, -2);
-    }
-    return economyActivitiesString;
-  }
-
-
 
   calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number) : number{
 

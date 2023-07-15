@@ -1,9 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { MapComponent } from '../features/map-feature/components/map/map.component';
+
 
 const routes: Routes = [
-   
+
+    {path: '', redirectTo: '/map', pathMatch: 'full'}, 
     {
         path: 'company/detail/:id',
         loadChildren: () => import('../features/company-detail-feature/company.detail.module')
@@ -13,7 +14,18 @@ const routes: Routes = [
         path: 'map',
         loadChildren: () => import('../features/map-feature/map.feature.module')
             .then(m => m.MapFeatureModule)
+    },
+    {
+        path: 'company/list',
+        loadChildren: () => import('../features/company-list-feature/company.list.module')
+            .then(m => m.CompanyListModule)
+    },
+    {
+        path: 'dashboard',
+        loadChildren: () => import('../features/dashboard-feature/dashboard.feature.module')
+            .then(m => m.DashboardFeatureModule)
     }
+
 
 ];
 

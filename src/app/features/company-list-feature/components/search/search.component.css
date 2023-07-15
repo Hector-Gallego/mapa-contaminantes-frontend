@@ -1,0 +1,24 @@
+.cont-body{
+    overflow-y: auto !important;
+    position: relative;
+  }
+  
+  /* Estilos del scrollbar */
+  .cont-body::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  .cont-body::-webkit-scrollbar-thumb {
+    background-color: #bcd7ff;
+    border-radius: 4px;
+  }
+  
+  .cont-body::-webkit-scrollbar-thumb:hover {
+    background-color: #8ebbff;
+  }
+  
+  .cont-body::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }
+
+  

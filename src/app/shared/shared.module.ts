@@ -4,19 +4,18 @@ import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './components/header/header.component'
-import { BrowserModule } from '@angular/platform-browser';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 
 @NgModule({
   declarations: [
-    HeaderComponent
+    HeaderComponent,
   ],
   imports: [
     CommonModule,
     HttpClientModule,
     FormsModule,
-    BrowserModule,
     RouterModule,
     NgbModule
 
@@ -26,7 +25,6 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     CommonModule,
     HttpClientModule,
     FormsModule,
-    BrowserModule,
     RouterModule,
     NgbModule
 
