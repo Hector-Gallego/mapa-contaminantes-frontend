@@ -1,0 +1,23 @@
+.scroll-acordeon{
+    overflow-y: auto !important;
+    max-height: 50vh;
+    position: relative;
+  }
+  
+  /* Estilos del scrollbar */
+  .scroll-acordeon::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .scroll-acordeon::-webkit-scrollbar-thumb {
+    background-color: #cfe2ff;
+    border-radius: 4px;
+  }
+  
+  .scroll-acordeon::-webkit-scrollbar-thumb:hover {
+    background-color: #8ebbff;
+  }
+  
+  .scroll-acordeon::-webkit-scrollbar-track {
+    background-color: #f1f1f1;
+  }

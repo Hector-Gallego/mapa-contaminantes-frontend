@@ -22,6 +22,7 @@ export class DashboardComponent {
 
   AsoComData:number[] = [];
   totalData: number[] = [];
+  loading : boolean = true;
 
 
 
@@ -53,6 +54,7 @@ export class DashboardComponent {
       console.log(this.totalData);
       console.log(this.totalStatisticsByCompanies);
       
+      this.loading = false;
       
 
     });
@@ -91,8 +93,8 @@ export class DashboardComponent {
   public barChartData: ChartData<'bar'> = {
     labels: ['Empresas', 'Actividades Económicas', 'Corrientes de residuos'],
     datasets: [
-      { data: [18, 30, 20], label: 'Asociados con empresas' },
-      { data: [0, 48, 40], label: 'Registros totales' }
+      { data: [], label: 'Asociados con empresas' },
+      { data: [], label: 'Registros totales' }
     ]
   };
 

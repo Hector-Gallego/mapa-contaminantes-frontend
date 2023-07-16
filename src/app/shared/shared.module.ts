@@ -5,12 +5,16 @@ import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { HeaderComponent } from './components/header/header.component'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SppinerComponent } from './components/sppiner/sppiner.component';
+import { NotfoundComponent } from './components/notfound/notfound.component';
 
 
 
 @NgModule({
   declarations: [
     HeaderComponent,
+    SppinerComponent,
+    NotfoundComponent,
   ],
   imports: [
     CommonModule,
@@ -26,7 +30,9 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
     HttpClientModule,
     FormsModule,
     RouterModule,
-    NgbModule
+    NgbModule,
+    SppinerComponent,
+    NotfoundComponent
 
   ]
 })

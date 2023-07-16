@@ -4,13 +4,12 @@ import { forkJoin } from 'rxjs';
 
 
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalMapComponent } from '../modal.map/modal.map.component'; 
+import { ModalMapComponent } from '../modal.map/modal.map.component';
 import { CompanyService } from 'src/app/core/services/company.service';
 import { WaterService } from '../../services/water.service';
 import { Water } from '../../models/water_coords/water';
 import { Company } from 'src/app/core/models/company';
-
-
+import { Router, ActivatedRoute } from '@angular/router';
 
 
 
@@ -22,60 +21,54 @@ import { Company } from 'src/app/core/models/company';
 export class MapComponent {
 
   map: Map | undefined;
-  id: number = 1;
   companies: Company[] = [];
   water: Water | undefined;
-  allCoordinates: number[][] = [];
+  allCoordinatesLine: number[][] = [];
+  allCoordinatesPolygon: number[] = [];
   companyWaterCoords: number[][] = [];
+  hasParams: boolean = false;
+  initialState = {
+    lat: 10.327510146503977,
+    lng: -75.5022481625158,
+    zoom: 10
+  };
   showLayers: boolean = false;
   addedSources: string[] = [];
   addedLayers: string[] = [];
+  loading: boolean = true;
 
-
-
-  @ViewChild('map')
-  private mapContainer!: ElementRef<HTMLElement>;
+  @ViewChild('map') private mapContainer!: ElementRef<HTMLElement>;
 
   constructor(private companyService: CompanyService,
     private waterService: WaterService,
-    private modalService: NgbModal) { }
+    private modalService: NgbModal,
+    private route: Router,
+    private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     const storedShowLayers = localStorage.getItem('showLayers');
     this.showLayers = storedShowLayers ? JSON.parse(storedShowLayers) : false;
-
-
+    this.verifyParams();
   }
 
+  ngAfterViewInit(): void {
+    this.initializeMap();
+    this.getCompaniesAndWaterCoords();
+  }
 
   ngOnDestroy(): void {
     this.map?.remove();
   }
 
-  openModal() {
-    this.modalService.open(ModalMapComponent); 
-  }
-  
-
- 
-
-  ngAfterViewInit(): void {
-
-    this.getCompaniesAndWaterCoords();
-
-    const initialState = { lng:  -75.5022481625158, lat: 10.327510146503977, zoom: 10 };
-
+  initializeMap() : void{
     this.map = new Map({
       container: this.mapContainer.nativeElement,
       style: `https://api.maptiler.com/maps/streets-v2/style.json?key=xs2zdJT6IQ73XlwWH5an`,
-      center: [initialState.lng, initialState.lat],
-      zoom: initialState.zoom
+      center: [this.initialState.lng, this.initialState.lat, ],
+      zoom: this.initialState.zoom
     });
-
     this.map.addControl(new NavigationControl({}), 'top-right');
-
   }
-
 
   getCompaniesAndWaterCoords(): void {
 
@@ -87,101 +80,79 @@ export class MapComponent {
       this.companies = companies;
       this.water = water;
 
-      water.features.forEach((feature) => {
-        const coordinates = feature.geometry.coordinates;
-        this.allCoordinates.push(...coordinates);
-      });
-
-      console.log(this.allCoordinates);
+      this.extractCoordinatesFromFeatures(this.water);
+      this.calculateMinDistanceAndaddLayersToMap(this.companies);
       
-
-      for (const company of this.companies) {
-        
-        const empresaLat = Number(company.latitude);
-        const empresaLon = Number(company.longitude);
-
-        const nearestRiverPoint = this.findNearestRiverPoint(empresaLat, empresaLon, this.allCoordinates);
-        const distanceToNearestRiverPoint = this.calculateDistance(empresaLat, empresaLon, nearestRiverPoint[1], nearestRiverPoint[0]);
-
-        this.companyWaterCoords.push([empresaLon, empresaLat]);
-        this.companyWaterCoords.push(nearestRiverPoint);
-
-        this.addedSources.push(`line-source-${company.name}`);
-        this.addedLayers.push(`line-layer-${company.name}`);
-
-        this.loadLayersMap(company);
-        this.loadPopupAndMarker(company, distanceToNearestRiverPoint); 
-
-        this.companyWaterCoords.splice(0);
-      }
+      this.loading = false;
 
     });
   }
 
-  removeLayers(): void {
+  verifyParams(): void{
 
-    this.map?.setLayoutProperty('water-bodies-layer', 'visibility', this.showLayers ? 'visible' : 'none');
+    const params = this.activatedRoute.snapshot.params;
+    this.hasParams = params.hasOwnProperty('lat') && params.hasOwnProperty('lng');
 
-    for (const layerName of this.addedLayers) {
-      if(this.map?.getLayer(layerName)){
-        this.map?.setLayoutProperty(layerName, 'visibility', this.showLayers ? 'visible' : 'none');
-      }   
+    if (this.hasParams) {
+      const lat = Number(params['lat']);
+      const lon = Number(params['lng']);
+      this.initialState.lat = lat;
+      this.initialState.lng = lon;
+      this.initialState.zoom = 20;  
     }
+
   }
 
-  updateComponent(): void {
-    localStorage.setItem('showLayers', JSON.stringify(this.showLayers));
-    window.location.reload();
-  }
-
-  loadPopupAndMarker(company: Company, distRiver : number) : void{
+  loadPopupAndMarker(company: Company, distRiver: number): void {
 
     const url = `http://localhost:4200/company/detail`;
     const economyStr = this.companyService.getEconomyActivities(company);
 
     var popup = new Popup({ offset: 25, className: 'card-container' })
-          .setMaxWidth('350px')
-          .setHTML(
-            ` 
+      .setMaxWidth('350px')
+      .setHTML(
+        ` 
+     
             <div class="card">
-              <div class="card-header text-white bg-info ">Información básica</div>
-              <div class="card-body">
-                <h5 class="card-title">${company.name}</h5>
-                <h6 class="card-subtitle mb-2 mt-3 text-body-secondary">Dirección</h6>
-                <p class="card-text">${company.adress}</p>
+                <div class="card-body">
+                    <h5 class="card-title text-primary">${company.name}</h5>
+                 </div>
+                <ul class="list-group list-group-flush">
+                    <li  class="list-group-item">
+                        <h6><i class="bi bi-pin-map-fill me-3"></i>Dirección:</h6>
+                        <p>${company.adress}</p>       
+                    </li>
+                    <li class="list-group-item">
+                        <h6 ><i class="bi bi-gear me-3"></i>Actividades económicas</h6>
+                        <p>${economyStr}</p>
+                        
+                    </li>
+                   
+                </ul>
+                <div class="card-body">
+                  <a href="${url}/${company.id}" class="btn btn-outline-primary w-100">Detalles</a>
+             
+                </div>
+                <div class="card-footer">
+                  Distancia al cuerpo de agua más cercano: ${distRiver.toFixed(3)} Km.
+                </div>
               </div>
-               
-              
-              <ul class="list-group list-group-flush">
-                <h6 class="ms-3 mt-3 card-subtitle mb-2 text-body-secondary">Actividades Económicas</h6>
-                <li class="list-group-item">${economyStr}</li>
-              </ul>
-              
-              <div class="card-body">
-                <a href="${url}/${company.id}" class="btn btn-outline-primary w-100">Detalles</a>
-              </div>
-              <div class="card-footer text-white bg-info">
-                Distancia al cuerpo de agua más cercano: ${distRiver.toFixed(3)} Km.
-              </div>
-
-            </div>
           `
-          );
+      );
 
-        new Marker({ color: "#FF0000" })
-          .setLngLat([parseFloat(company.longitude), parseFloat(company.latitude)])
-          .setPopup(popup)
-          .addTo(this.map!);
+    new Marker({ color: "#FF0000" })
+      .setLngLat([parseFloat(company.longitude), parseFloat(company.latitude)])
+      .setPopup(popup)
+      .addTo(this.map!);
 
   }
-  
 
-  loadLayersMap(company : Company): void{
+  loadLayersMap(company: Company): void {
 
     const lonCompany = this.companyWaterCoords[0][0];
-        const latCompany = this.companyWaterCoords[0][1];
-        const lonWater = this.companyWaterCoords[1][0];
-        const latWater = this.companyWaterCoords[1][1];
+    const latCompany = this.companyWaterCoords[0][1];
+    const lonWater = this.companyWaterCoords[1][0];
+    const latWater = this.companyWaterCoords[1][1];
 
     this.map?.on('load', () => {
 
@@ -196,8 +167,8 @@ export class MapComponent {
           type: 'line',
           source: 'water-bodies',
           paint: {
-            'line-color': 'blue', 
-            'line-width': 3 
+            'line-color': 'blue',
+            'line-width': 3
           }
         });
       }
@@ -221,8 +192,8 @@ export class MapComponent {
         type: 'line',
         source: `line-source-${company.name}`,
         paint: {
-          'line-color': 'red', 
-          'line-width': 1, 
+          'line-color': 'red',
+          'line-width': 1,
         },
       });
       this.removeLayers();
@@ -230,9 +201,62 @@ export class MapComponent {
 
   }
 
-  calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number) : number{
+  removeLayers(): void {
 
-    const R = 6371; 
+    this.map?.setLayoutProperty('water-bodies-layer', 'visibility', this.showLayers ? 'visible' : 'none');
+    for (const layerName of this.addedLayers) {
+      if (this.map?.getLayer(layerName)) {
+        this.map?.setLayoutProperty(layerName, 'visibility', this.showLayers ? 'visible' : 'none');
+      }
+    }
+  }
+
+  extractCoordinatesFromFeatures(water: Water): void{
+
+    water.features.forEach((feature) => {
+      if (feature.geometry.type === 'LineString') {
+        const coordinatesLine = feature.geometry.coordinates;
+        this.allCoordinatesLine.push(...coordinatesLine);
+      } else {
+        const coordinatesPolygon = feature.geometry.coordinates;
+        this.allCoordinatesPolygon = this.allCoordinatesPolygon.concat(...coordinatesPolygon);
+      }
+    });
+
+  }
+
+  calculateMinDistanceAndaddLayersToMap(companies: any): void{
+
+    for (const company of companies) {
+
+      const empresaLat = Number(company.latitude);
+      const empresaLon = Number(company.longitude);
+      const nearestRiverPointPolygono = this.findNearestRiverPoint(empresaLat, empresaLon, this.allCoordinatesPolygon);
+      const nearestRiverPointLine = this.findNearestRiverPoint(empresaLat, empresaLon, this.allCoordinatesLine);
+      const distanceToNearestRiverPointPolygono = this.calculateDistance(empresaLat, empresaLon, nearestRiverPointPolygono[1], nearestRiverPointPolygono[0]);
+      const distanceToNearestRiverPoinLine = this.calculateDistance(empresaLat, empresaLon, nearestRiverPointLine[1], nearestRiverPointLine[0]);
+
+      this.companyWaterCoords.push([empresaLon, empresaLat]);
+
+      if (distanceToNearestRiverPointPolygono <= distanceToNearestRiverPoinLine) {
+        this.companyWaterCoords.push(nearestRiverPointPolygono);
+        this.loadPopupAndMarker(company, distanceToNearestRiverPointPolygono);
+      } else {
+        this.companyWaterCoords.push(nearestRiverPointLine);
+        this.loadPopupAndMarker(company, distanceToNearestRiverPoinLine);
+      }
+
+      this.addedSources.push(`line-source-${company.name}`);
+      this.addedLayers.push(`line-layer-${company.name}`);
+      this.loadLayersMap(company);
+      this.companyWaterCoords.splice(0);
+    }
+
+  }
+
+  calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+
+    const R = 6371;
     const dLat = (lat2 - lat1) * (Math.PI / 180);
     const dLon = (lon2 - lon1) * (Math.PI / 180);
     const a =
@@ -245,18 +269,16 @@ export class MapComponent {
     return distance;
   }
 
-
-
-   findNearestRiverPoint(empresaLat: number, empresaLon: number, riverPoints: any) {
+  findNearestRiverPoint(empresaLat: number, empresaLon: number, riverPoints: any) {
 
     let minDistance = Infinity;
     let nearestPoint = null;
 
     for (const point of riverPoints) {
-      
-      const lat = point[1];
-      const lon = point[0]; 
 
+      const x = 1;
+      const lat = point[1];
+      const lon = point[0];
       const distance = this.calculateDistance(empresaLat, empresaLon, lat, lon);
 
       if (distance < minDistance) {
@@ -267,4 +289,13 @@ export class MapComponent {
     return nearestPoint;
   }
 
+  updateComponent(): void {
+    localStorage.setItem('showLayers', JSON.stringify(this.showLayers));
+    window.location.reload();
+  }
+
+  openModal() {
+    this.modalService.open(ModalMapComponent);
+  }
 }
+

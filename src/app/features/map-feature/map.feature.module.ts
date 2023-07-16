@@ -10,10 +10,12 @@ import { SharedModule } from 'src/app/shared/shared.module';
   declarations: [
     MapComponent,
     ModalMapComponent,
+    
   ],
   imports: [
     MapFeatureRoutingModule,
-    SharedModule
+    SharedModule,
+    
 
   ],
   exports:[

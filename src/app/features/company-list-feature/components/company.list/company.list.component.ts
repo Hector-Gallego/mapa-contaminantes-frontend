@@ -21,6 +21,8 @@ export class CompanyListComponent {
   totalElements: number = 0;
   currentPage: number = 1;
 
+  loading : boolean = true;
+
   @ViewChild('container') containerElementRef!: ElementRef;
   
 
@@ -34,7 +36,8 @@ export class CompanyListComponent {
   }
 
   getActivities(company : Company){
-    return this.companyService.getEconomyActivities(company)
+    return this.companyService.getEconomyActivities(company);
+   
   }
 
 
@@ -43,8 +46,11 @@ export class CompanyListComponent {
       this.result = res;
       this.content = res.content;
       this.totalElements = res.totalElements;
-      console.log(this.result);   
-    })
+      console.log(this.result);
+      
+      this.loading = false;
+    });
+   
   }
 
   onPaginationChanged(page: number): void {
@@ -52,13 +58,14 @@ export class CompanyListComponent {
     this.getResults();
     this.containerElementRef.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
  
-    console.log("se activo el evento en el componente lista. currente page: "+this.currentPage);
-  
-    
   }
 
-  goToRoute(id: number) {
+  goToRouteCompanyDetail(id: number) {
     this.router.navigate([`/company/detail/${id}`]);
+  }
+
+  goToRouteMap(lat: string, lng:string) {
+    this.router.navigate([`/map/${lat}/${lng}`]);
   }
 
 }

@@ -27,8 +27,6 @@ export class SearchComponent {
 
   clearSearchBox(): void{
     this.isSearching = false;
-    // Restablece el contenido del cuadro de búsqueda
-    // Puedes usar la referencia al elemento #searchBox para obtener y manipular su valor
     if (this.searchBox) {
       this.searchBox.nativeElement.value = '';
     }
