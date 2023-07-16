@@ -60,11 +60,11 @@ export class MapComponent {
     this.map?.remove();
   }
 
-  initializeMap() : void{
+  initializeMap(): void {
     this.map = new Map({
       container: this.mapContainer.nativeElement,
       style: `https://api.maptiler.com/maps/streets-v2/style.json?key=xs2zdJT6IQ73XlwWH5an`,
-      center: [this.initialState.lng, this.initialState.lat, ],
+      center: [this.initialState.lng, this.initialState.lat,],
       zoom: this.initialState.zoom
     });
     this.map.addControl(new NavigationControl({}), 'top-right');
@@ -75,20 +75,17 @@ export class MapComponent {
     forkJoin([
       this.companyService.getCompanies(),
       this.waterService.getWater()
-    ]).subscribe(([companies, water]) => {
-
-      this.companies = companies;
-      this.water = water;
-
-      this.extractCoordinatesFromFeatures(this.water);
-      this.calculateMinDistanceAndaddLayersToMap(this.companies);
-      
-      this.loading = false;
-
+    ]).subscribe(([companies, water])=>{
+        this.companies = companies;
+        this.water = water;
+        this.extractCoordinatesFromFeatures(this.water);
+        this.calculateMinDistanceAndaddLayersToMap(this.companies);
+        this.loading = false;   
     });
+
   }
 
-  verifyParams(): void{
+  verifyParams(): void {
 
     const params = this.activatedRoute.snapshot.params;
     this.hasParams = params.hasOwnProperty('lat') && params.hasOwnProperty('lng');
@@ -98,7 +95,7 @@ export class MapComponent {
       const lon = Number(params['lng']);
       this.initialState.lat = lat;
       this.initialState.lng = lon;
-      this.initialState.zoom = 20;  
+      this.initialState.zoom = 20;
     }
 
   }
@@ -211,7 +208,7 @@ export class MapComponent {
     }
   }
 
-  extractCoordinatesFromFeatures(water: Water): void{
+  extractCoordinatesFromFeatures(water: Water): void {
 
     water.features.forEach((feature) => {
       if (feature.geometry.type === 'LineString') {
@@ -225,7 +222,7 @@ export class MapComponent {
 
   }
 
-  calculateMinDistanceAndaddLayersToMap(companies: any): void{
+  calculateMinDistanceAndaddLayersToMap(companies: any): void {
 
     for (const company of companies) {
 

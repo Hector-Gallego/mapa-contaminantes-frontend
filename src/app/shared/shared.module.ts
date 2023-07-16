@@ -7,6 +7,8 @@ import { HeaderComponent } from './components/header/header.component'
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { SppinerComponent } from './components/sppiner/sppiner.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
+import { ToastComponent } from './components/toast/toast.component';
+import { ErrorComponent } from './components/error/error.component';
 
 
 
@@ -15,6 +17,8 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
     HeaderComponent,
     SppinerComponent,
     NotfoundComponent,
+    ToastComponent,
+    ErrorComponent,
   ],
   imports: [
     CommonModule,
@@ -32,7 +36,10 @@ import { NotfoundComponent } from './components/notfound/notfound.component';
     RouterModule,
     NgbModule,
     SppinerComponent,
-    NotfoundComponent
+    NotfoundComponent,
+    ToastComponent,
+    ErrorComponent
+    
 
   ]
 })

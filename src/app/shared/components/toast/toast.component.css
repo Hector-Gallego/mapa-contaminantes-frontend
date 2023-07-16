@@ -1,0 +1,7 @@
+.custom-toast {
+    position: fixed;
+    z-index: 99999; /* Elige un valor alto para asegurarte de que esté por encima de todo */
+    bottom: 1rem;
+    right: 1rem;
+  }
+  

@@ -1,9 +1,11 @@
-import { NgModule } from '@angular/core';
+import { ErrorHandler, NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { CoreRoutingModule } from './core/core.routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { SharedModule } from './shared/shared.module';
+import { GlobalErrorHandler } from './core/errors/global.error.handler';
+
 
 
 
@@ -16,9 +18,13 @@ import { SharedModule } from './shared/shared.module';
     CoreModule,
     CoreRoutingModule,
     SharedModule,
-    BrowserModule
+    BrowserModule,  
   ],
-  providers: [],
+  providers: [
+
+    {provide: ErrorHandler, useClass: GlobalErrorHandler}
+   
+  ],
   bootstrap: [AppComponent],
 
 })

@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotfoundComponent } from '../shared/components/notfound/notfound.component';
+import { ErrorComponent } from '../shared/components/error/error.component';
 
 
 const routes: Routes = [
@@ -26,6 +27,7 @@ const routes: Routes = [
         loadChildren: () => import('../features/dashboard-feature/dashboard.feature.module')
             .then(m => m.DashboardFeatureModule)
     },
+    {path: 'error', component: ErrorComponent},
     { path: '**', component: NotfoundComponent }
 
 
