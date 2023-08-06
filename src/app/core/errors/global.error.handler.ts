@@ -13,8 +13,11 @@ export class GlobalErrorHandler implements ErrorHandler {
 
     if (error instanceof HttpErrorResponse) {
       this.route.navigateByUrl('/error');
+      console.error(error);
+      
     } else {
       this.route.navigateByUrl('/error');
+      console.error(error);
     }
 
   }

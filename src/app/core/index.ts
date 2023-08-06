@@ -1,3 +1,5 @@
+import { from } from 'rxjs';
+
 export * from './models/central_product_clasification/centralproductClasification';
 export * from './models/central_product_clasification/classCPC';
 export * from './models/central_product_clasification/divisionCPC';
@@ -12,3 +14,4 @@ export * from './models/economy_activity/sectionCIIU';
 export * from './models/company';
 export * from './models/residualCurrent';
 export * from './models/residualSubCurrent';
+export * from './models/company.dto'

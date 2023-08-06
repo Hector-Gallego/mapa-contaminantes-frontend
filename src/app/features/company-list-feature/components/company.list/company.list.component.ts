@@ -33,7 +33,7 @@ export class CompanyListComponent {
     private toastService: ToastService) { }
 
   ngOnInit(): void {
-    this.getResults();
+    this.getResults(this.page);
 
   }
 
@@ -43,7 +43,10 @@ export class CompanyListComponent {
   }
 
 
-  getResults(): void {
+  getResults(page: number): void {
+
+    this.loading = true;
+    this.page = page;
     this.pageableService.getResults(this.currentPage - 1, this.size)
       .subscribe((res) => {
 
@@ -58,9 +61,9 @@ export class CompanyListComponent {
 
   onPaginationChanged(page: number): void {
     this.currentPage = page;
-    this.getResults();
+    this.getResults(page);
     this.containerElementRef.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
+  
   }
 
   goToRouteCompanyDetail(id: number) {

@@ -1,35 +1,41 @@
-<div class="container">
+<div class="container vh-85 position-relative">
 
-    <div class="mt-5">
-        <h1 class="font-ralewey">{{company?.name}}</h1>
-        <div class="d-flex align-items-center">
-            <i class="me-3 bi bi-geo-alt" style="font-size: 1.3rem; color: rgb(44, 101, 206); "></i>
-            <p class="mb-0"> {{company?.adress}}</p>
+    <app-sppiner *ngIf="loading"></app-sppiner>
+
+    <div *ngIf="!loading">
+        <div class="mt-5">
+            <h1 class="font-ralewey">{{company?.name}}</h1>
+            <div class="d-flex align-items-center">
+                <i class="me-3 bi bi-geo-alt" style="font-size: 1.3rem; color: rgb(44, 101, 206); "></i>
+                <p class="mb-0"> {{company?.adress}}</p>
+            </div>
         </div>
-    </div>
-
-    <div class="mt-5 mb-5 ">
-
-        <div class="mb-5">
-            <h3 class="mb-3">Actividades Económicas</h3>
-            <p>
-                A continuación se presentan las actividades económicas asociadas a esta empresa.
-                Al desplegar una actividad económica, podrás visualizar las corrientes de residuos
-                y los productos o servicios asociados a esa actividad económica.
-                <br>
-                <br>
-                Cabe destacar que los residuos, productos y/o servicios no están directamente relacionados con
-                la empresa en cuestión, simplemente se trata de datos potencialmente relacionados
-                con esta empresa en base a sus actividades económicas.
-                <br>
-                <br>    
-            </p>
-
+    
+        <div class="mt-5 mb-5 ">
+    
+            <div class="mb-5">
+                <h3 class="mb-3">Actividades Económicas</h3>
+                <p>
+                    A continuación se presentan las actividades económicas asociadas a esta empresa.
+                    Al desplegar una actividad económica, podrás visualizar las corrientes de residuos
+                    y los productos o servicios asociados a esa actividad económica.
+                    <br>
+                    <br>
+                    Cabe destacar que los residuos, productos y/o servicios no están directamente relacionados con
+                    la empresa en cuestión, simplemente se trata de datos potencialmente relacionados
+                    con esta empresa en base a sus actividades económicas.
+                    <br>
+                    <br>    
+                </p>
+    
+            </div>
+    
+            <app-acordeon-company [company]="company"></app-acordeon-company>
+    
         </div>
 
-        <app-acordeon-company [company]="company"></app-acordeon-company>
-
     </div>
+   
 
 
 

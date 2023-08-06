@@ -1,61 +1,66 @@
-<div class="container pt-lg-5 pt-md-5 pt-sm-0 mb-5 " >
+<div class="container pt-lg-5 pt-md-5 pt-sm-0 mb-5 vh-85 position-relative">
 
+    <app-sppiner *ngIf="loading"></app-sppiner>
    
+    <div *ngIf="!loading">
+        <div class="row align-items-center mt-5 mb-5 d-flex">
+
+        
+            <div class="col-md-5 col-lg-5 col-sm-12 ">
     
-    <div class="row align-items-center mt-5 mb-5 d-flex position-relative">
-
-        <app-sppiner *ngIf="loading"></app-sppiner>
-        <div class="col-md-5 col-lg-5 col-sm-12 ">
-
-            
-
-            <div class="card mb-3">
-                <div class="card-body text-white" style="background-color: #86c7f3;">
-                    <h5 class="card-title">Empresas registradas</h5>
-                    <h2 class="card-text">{{totalStatisticsByCompanies?.countCompany}}</h2>
-                </div>
-            </div>
-            <div class=" d-flex ">
-
-                <div class="card me-3" >
-                    <div class="card-body text-white" style="background-color: #e686f3;">
-                        <h5 class="card-title">Actividades económicas</h5>
-                        <h2 class="card-text">{{totalStatisticsByCompanies?.countEconomyActivities}}</h2>
+                
+    
+                <div class="card mb-3">
+                    <div class="card-body text-white" style="background-color: #86c7f3;">
+                        <h5 class="card-title">Empresas registradas</h5>
+                        <h2 class="card-text">{{totalStatisticsByCompanies?.countCompany}}</h2>
                     </div>
                 </div>
-                <div class="card">
-                    <div class="card-body text-white" style="background-color: #86f3aa;">
-                        <h5 class="card-title">Corrientes de residuos</h5>
-                        <h2 class="card-text">{{totalStatisticsByCompanies?.countResidualsCurrents}}</h2>
+                <div class=" d-flex ">
+    
+                    <div class="card me-3" >
+                        <div class="card-body text-white" style="background-color: #e686f3;">
+                            <h5 class="card-title">Actividades económicas</h5>
+                            <h2 class="card-text">{{totalStatisticsByCompanies?.countEconomyActivities}}</h2>
+                        </div>
                     </div>
+                    <div class="card">
+                        <div class="card-body text-white" style="background-color: #86f3aa;">
+                            <h5 class="card-title">Corrientes de residuos</h5>
+                            <h2 class="card-text">{{totalStatisticsByCompanies?.countResidualsCurrents}}</h2>
+                        </div>
+                    </div>
+    
                 </div>
-
+    
+    
             </div>
-
-
+            <div class="col-md-7 col-lg-7 col-sm-12">
+                <canvas baseChart class="chart" [data]="barChartData" [options]="barChartOptions"
+                    [plugins]="barChartPlugins" [type]="barChartType">
+                </canvas>
+            </div>
         </div>
-        <div class="col-md-7 col-lg-7 col-sm-12">
-            <canvas baseChart class="chart" [data]="barChartData" [options]="barChartOptions"
-                [plugins]="barChartPlugins" [type]="barChartType">
-            </canvas>
+    
+    
+        <div class="mt-5">
+            <app-graphic-activity-count-company></app-graphic-activity-count-company>
         </div>
-    </div>
+    
+        <div class="mt-5">
+            <app-graphic-companies-count-residuals-activities></app-graphic-companies-count-residuals-activities>
+        </div>
+        <div class="mt-5">
+            <app-graphic-residuals-count-activities></app-graphic-residuals-count-activities>
+        </div>
+    
+        <div class="mt-5">
+            <app-graphic-residuals-count-companies></app-graphic-residuals-count-companies>
+        </div>
 
-
-    <div class="mt-5">
-        <app-graphic-activity-count-company></app-graphic-activity-count-company>
     </div>
-
-    <div class="mt-5">
-        <app-graphic-companies-count-residuals-activities></app-graphic-companies-count-residuals-activities>
-    </div>
-    <div class="mt-5">
-        <app-graphic-residuals-count-activities></app-graphic-residuals-count-activities>
-    </div>
-
-    <div class="mt-5">
-        <app-graphic-residuals-count-companies></app-graphic-residuals-count-companies>
-    </div>
+    
+   
 
 
 </div>

@@ -15,7 +15,8 @@ import { CompanyService } from 'src/app/core/services/company.service';
 })
 export class DetailCompanyComponent {
 
-  panelOpenState = false;
+  panelOpenState: boolean = false;
+  loading : boolean = true;
 
   company : Company | undefined;
   constructor(private route: ActivatedRoute,
@@ -30,11 +31,7 @@ export class DetailCompanyComponent {
       this.companyService.getCompany(id)
         .subscribe((company) =>{
           this.company = company;
-
-          company.economyActivityCIIUs.forEach((eco)=>{
-
-            console.log(eco.centralProductClasificationCPCs);
-          });        
+          this.loading= false;           
           
         });   
      }

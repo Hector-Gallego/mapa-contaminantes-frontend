@@ -1,49 +1,60 @@
-<div class="container"  #container>
+<div class="container vh-85 position-relative" #container>
+
+
+    <app-sppiner *ngIf="loading"></app-sppiner>
+
+    <div *ngIf="!loading">
+
+        <div class="mt-5">
+            <app-search></app-search>
+        </div>
+
+        <div style="min-height: 50vh;" class="d-flex flex-wrap justify-content-around mt-5 position-relative  ">
+
+
+
+            <div *ngFor="let con of content">
+
+                <div class="card mt-3" style="width: 20rem; height: 25rem;">
+                    <div class="card-body">
+                        <h5 class="card-title text-primary mt-3">{{con.name}}</h5>
+                    </div>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <h6><i class="bi bi-pin-map-fill me-3"></i>Dirección:</h6>
+                            <p>{{con.adress| ellipsis:30}}</p>
+                        </li>
+                        <li class="list-group-item">
+                            <h6><i class="bi bi-gear me-3"></i>Actividades económicas</h6>
+                            <p>{{getActivities(con) | ellipsis:50}}</p>
+
+                        </li>
+
+                    </ul>
+                    <div class="card-body">
+                        <button (click)="goToRouteCompanyDetail(con.id)" class="btn btn-link">Detalles</button>
+                        <button (click)="goToRouteMap(con.latitude, con.longitude)" class="btn btn-link ">Ver en
+                            mapa</button>
+
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+
+
+        <div class="d-flex justify-content-center mt-5 mb-5">
+
+            <ngb-pagination [page]="page" [pageSize]="size" [collectionSize]="totalElements"
+                (pageChange)="onPaginationChanged($event)"></ngb-pagination>
+    
+        </div>
+    
+
+    </div>
 
     
-   
 
-    <div class="mt-5"> 
-        <app-search></app-search> 
-    </div>
 
-    <div style="min-height: 50vh;" class="d-flex flex-wrap justify-content-around mt-5 position-relative  ">
-
-       
-        <app-sppiner *ngIf="loading"></app-sppiner>
-        <div *ngFor="let con of content">
-
-            <div class="card mt-3" style="width: 20rem; height: 25rem;">
-                <div class="card-body">
-                    <h5 class="card-title text-primary mt-3">{{con.name}}</h5>
-                 </div>
-                <ul class="list-group list-group-flush">
-                    <li  class="list-group-item">
-                        <h6><i class="bi bi-pin-map-fill me-3"></i>Dirección:</h6>
-                        <p>{{con.adress| ellipsis:30}}</p>       
-                    </li>
-                    <li class="list-group-item">
-                        <h6 ><i class="bi bi-gear me-3"></i>Actividades económicas</h6>
-                        <p>{{getActivities(con) | ellipsis:50}}</p>
-                        
-                    </li>
-                   
-                </ul>
-                <div class="card-body">
-                    <button (click)="goToRouteCompanyDetail(con.id)" class="btn btn-link">Detalles</button>  
-                    <button (click)="goToRouteMap(con.latitude, con.longitude)"  class="btn btn-link ">Ver en mapa</button>
-               
-                </div>
-              </div>
-
-           
-        </div>
-    </div>
-
-    <div class="d-flex justify-content-center mt-5 mb-5">
-
-        <ngb-pagination [page]="page" [pageSize]="size" [collectionSize]="totalElements"
-            (pageChange)="onPaginationChanged($event)"></ngb-pagination>
-
-    </div>
 </div>

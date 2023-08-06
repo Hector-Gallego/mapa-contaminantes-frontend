@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { StatisticsDto } from "../models/statisticsDto";
 import { TotalStatisticsByCompanyDto } from "../models/totalStatisticsByCompanyDto";
 import { TotalAllStatisticsDto } from "../models/totalAllStatisticsDto";
+import { environment } from "src/environments/environment";
 
 @Injectable({
     providedIn:'root'
@@ -11,7 +12,7 @@ import { TotalAllStatisticsDto } from "../models/totalAllStatisticsDto";
 
 export class StatisticsService{
 
-    private staticsUrl = 'http://localhost:8080/api/statistics';
+    private staticsUrl = `${environment.apiUrl}/statistics`;
 
     constructor(private http: HttpClient){}
 

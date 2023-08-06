@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
 import { Company } from '../models/company';
+import { CompanyDto } from '../models/company.dto';
+import { environment } from 'src/environments/environment';
 
 
 @Injectable({
@@ -9,12 +11,12 @@ import { Company } from '../models/company';
 })
 export class CompanyService {
 
-  private companysUrl = 'http://localhost:8080/api/companies'
+  private companysUrl = `${environment.apiUrl}/companies`;
 
   constructor(private http: HttpClient) { }
 
-  getCompanies() : Observable<Company[]>{
-    return this.http.get<Company[]>(this.companysUrl);
+  getCompanies() : Observable<CompanyDto[]>{
+    return this.http.get<CompanyDto[]>(this.companysUrl);
   }
 
   getCompany(id:number) : Observable<Company>{
@@ -31,6 +33,15 @@ export class CompanyService {
       economyActivitiesString = economyActivitiesString.slice(0, -2);
     }
     return economyActivitiesString;
+  }
+
+  getEconomyActivitiesDto(company: CompanyDto): string {
+    let economyActivitiesString = '';
+    if (company && company.economyActivities && company.economyActivities.length > 0) {
+      economyActivitiesString = company.economyActivities.join(', ');
+    }
+    return economyActivitiesString;
+
   }
 
   searchCompany(term: string): Observable<Company[]> {
